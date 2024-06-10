@@ -1,7 +1,13 @@
 provider "google" {
-    credentials = file("devops@test-project-09061993-a369a8543be1.json")
+    credentials = var.TF_API_TOKEN
     project     = "your-gcp-project-id"
     region      = "us-central1"
+}
+
+variable "TF_API_TOKEN" {
+  description = "The API token for authentication"
+  type        = string
+  sensitive   = true
 }
 
 resource "google_storage_bucket" "my_bucket" {
