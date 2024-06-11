@@ -1,5 +1,5 @@
 provider "google" {
-    credentials = file(env("GOOGLE_APPLICATION_CREDENTIALS"))
+    credentials = file("${GOOGLE_APPLICATION_CREDENTIALS}")
     project     = "your-gcp-project-id"
     region      = "us-central1"
 }
