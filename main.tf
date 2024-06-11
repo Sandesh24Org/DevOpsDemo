@@ -1,5 +1,5 @@
 provider "google" {
-    credentials = var.TF_API_TOKEN
+    credentials = file(env("GOOGLE_APPLICATION_CREDENTIALS"))
     project     = "your-gcp-project-id"
     region      = "us-central1"
 }
@@ -11,7 +11,7 @@ variable "TF_API_TOKEN" {
 }
 
 resource "google_storage_bucket" "my_bucket" {
-    name          = "my-bucket"
+    name          = "sandesh-bucket"
     location      = "us-central1"
     force_destroy = true
 }

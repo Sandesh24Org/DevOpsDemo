@@ -68,6 +68,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Setup GCP credentials
+      run: echo "${{ secrets.GCP_CREDENTIALS }}" | base64 --decode > gcp_credentials.json
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: gcp_credentials.json
+
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
