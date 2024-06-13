@@ -1,7 +1,7 @@
 ## the bucketname is prefixed with the GCP project name which is unique
 resource "google_storage_bucket" "auto-expire" {
   name          = "bucket-1306-1532"
-  location      = "US"
+  region      = "Italy"
   force_destroy = true
 
   lifecycle_rule {
