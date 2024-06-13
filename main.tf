@@ -1,17 +1,24 @@
-provider "google" {
-    credentials = file("${GOOGLE_APPLICATION_CREDENTIALS}")
-    project     = "your-gcp-project-id"
-    region      = "us-central1"
-}
+## the bucketname is prefixed with the GCP project name which is unique
+resource "google_storage_bucket" "auto-expire" {
+  name          = "tf-gcp-demo-377217-bucket"   
+  location      = "US"
+  force_destroy = true
 
-variable "TF_API_TOKEN" {
-  description = "The API token for authentication"
-  type        = string
-  sensitive   = true
-}
+  lifecycle_rule {
+    condition {
+      age = 5
+    }
+    action {
+      type = "Delete"
+    }
+  }
 
-resource "google_storage_bucket" "my_bucket" {
-    name          = "sandesh-bucket"
-    location      = "us-central1"
-    force_destroy = true
+  lifecycle_rule {
+    condition {
+      age = 1
+    }
+    action {
+      type = "AbortIncompleteMultipartUpload"
+    }
+  }
 }
