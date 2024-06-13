@@ -1,6 +1,6 @@
 ## the bucketname is prefixed with the GCP project name which is unique
 resource "google_storage_bucket" "auto-expire" {
-  name          = "sandesh-bucket"   
+  name          = "bucket-sentinel"   
   location      = "US"
   force_destroy = true
 
