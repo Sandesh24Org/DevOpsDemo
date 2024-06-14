@@ -27,4 +27,7 @@ resource "google_container_cluster" "primary" {
   location = "us-central1"
 
   enable_autopilot = true
+  ip_allocation_policy {
+    // This block is empty to enable IP aliasing with default settings.
+  }
 }
