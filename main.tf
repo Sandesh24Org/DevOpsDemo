@@ -1,6 +1,6 @@
 ## the bucketname is prefixed with the GCP project name which is unique
 resource "google_storage_bucket" "auto-expire" {
-  name          = "bucket-tf-cloud-1406-1523"
+  name          = "bucket-tf-cloud-1406-1553"
   location      = "US"
   force_destroy = true
 
@@ -24,7 +24,7 @@ resource "google_storage_bucket" "auto-expire" {
 }
 
 resource "google_container_cluster" "primary" {
-  name     = "gke-tf-cloud-1406-1523"
+  name     = "gke-tf-cloud-1406-1553"
   location = "us-central1"
 
   remove_default_node_pool = true
