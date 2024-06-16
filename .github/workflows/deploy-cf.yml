@@ -1,47 +1,84 @@
-name: Deployment
+name: Deploy to GCP Cloud Functions
 
-# on commit push, run job
-on: [ push ]
+on:
+  push:
+    branches:
+      - main  # Change this to your deployment branch
 
 jobs:
-  run:
-    # worker runs on latest ubuntu
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # checkout to our repository so we have access to the source code
-      - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      # # create a zip file of the src directory
-      # - name: Create zip of src
-      #   run: zip -r src.zip src
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        workload_identity_provider: projects/456339115884/locations/global/workloadIdentityPools/github/providers/github-provider
+        service_account: ${{ secrets.GCP_SA_KEY }}
+        token_format: 'access_token'
 
-      # # upload main.py to a GCS bucket
-      # - name: Upload to GCS
-      #   uses: google-github-actions/upload-cloud-storage@v0.2.1
-      #   with:
-      #     credentials: ${{ secrets.GCP_SA_KEY }}
-      #     path: ./src.zip
-      #     destination: github-actions-cf-demo/src.zip
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
 
-      # the actual deployment to google
-      - name: Cloud Functions Deploy
-        uses: google-github-actions/deploy-cloud-functions@v0.1.2
-        with:
-          credentials: ${{ secrets.GCP_SA_KEY }}
-          name: python-hello-world-cf
-          description: Test python cloud function 4# nullable
-          project_id: test-project-09061993
-          region: us-central1
-          source_dir: ./src
-          # name of our function in our main.py file, defaults to the resource name suffix 
-          entry_point: hello_world
-          # runtime to use for the function
-          runtime: python39
-          # the function execution timeout
-          timeout: 60
-          # the maximum number of instances for the function.
-          max_instances: 1
-          # optional configs, see google-cloud-actions/deploy-cloud-functions for full reference
-          # list of key-value pairs to set as environment variables in the form KEY1=VALUE1,KEY2=VALUE2.
-#       env_vars: # optional
+    - name: Deploy to Cloud Functions
+      run: |
+        gcloud functions deploy python-hello-world-cf \
+          --region=us-central1 \
+          --runtime=python310 \
+          --trigger-http \
+          --allow-unauthenticated \
+          --entry-point=hello_world  # Change this to your function's entry point
+
+
+
+# name: Deployment
+
+# # on commit push, run job
+# on: [ push ]
+
+# jobs:
+#   run:
+#     # worker runs on latest ubuntu
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       # checkout to our repository so we have access to the source code
+#       - uses: actions/checkout@v2
+
+#       # # create a zip file of the src directory
+#       # - name: Create zip of src
+#       #   run: zip -r src.zip src
+
+#       # # upload main.py to a GCS bucket
+#       # - name: Upload to GCS
+#       #   uses: google-github-actions/upload-cloud-storage@v0.2.1
+#       #   with:
+#       #     credentials: ${{ secrets.GCP_SA_KEY }}
+#       #     path: ./src.zip
+#       #     destination: github-actions-cf-demo/src.zip
+
+#       # the actual deployment to google
+#       - name: Cloud Functions Deploy
+#         uses: google-github-actions/deploy-cloud-functions@v0.1.2
+#         with:
+#           credentials: ${{ secrets.GCP_SA_KEY }}
+#           name: python-hello-world-cf
+#           description: Test python cloud function 4# nullable
+#           project_id: test-project-09061993
+#           region: us-central1
+#           source_dir: ./src
+#           # name of our function in our main.py file, defaults to the resource name suffix 
+#           entry_point: hello_world
+#           # runtime to use for the function
+#           runtime: python39
+#           # the function execution timeout
+#           timeout: 60
+#           # the maximum number of instances for the function.
+#           max_instances: 1
+#           # optional configs, see google-cloud-actions/deploy-cloud-functions for full reference
+#           # list of key-value pairs to set as environment variables in the form KEY1=VALUE1,KEY2=VALUE2.
+# #       env_vars: # optional
