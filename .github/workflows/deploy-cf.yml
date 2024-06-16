@@ -10,7 +10,7 @@ jobs:
 
     steps:
       # checkout to our repository so we have access to the source code
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
       # # create a zip file of the src directory
       # - name: Create zip of src
