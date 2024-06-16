@@ -12,12 +12,20 @@ jobs:
       # checkout to our repository so we have access to the source code
       - uses: actions/checkout@v2
 
+      # upload main.py to a GCS bucket
+      - name: Upload to GCS
+        uses: google-github-actions/upload-cloud-storage@v0.2.1
+        with:
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          path: ./src/main.py
+          destination: gs://github-actions-cf-demo/main.py
+
       # the actual deployment to google
       - name: Cloud Functions Deploy
         uses: google-github-actions/deploy-cloud-functions@v0.1.2
         with:
           credentials: ${{ secrets.GCP_SA_KEY }}
-          name: python-hello-world-cf
+          name: python-hello-world-cf-2
           description: Test python cloud function 3# nullable
           project_id: test-project-09061993
           region: europe-west1
