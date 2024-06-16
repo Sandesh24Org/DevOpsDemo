@@ -22,12 +22,12 @@ resource "google_storage_bucket" "auto-expire" {
   }
 }
 
-resource "google_container_cluster" "primary" {
-  name     = "gke-tf-cloud-1406-1612"
-  location = "us-central1"
+# resource "google_container_cluster" "primary" {
+#   name     = "gke-tf-cloud-1406-1612"
+#   location = "us-central1"
 
-  enable_autopilot = true
-  ip_allocation_policy {
-    // This block is empty to enable IP aliasing with default settings.
-  }
-}
+#   enable_autopilot = true
+#   ip_allocation_policy {
+#     // This block is empty to enable IP aliasing with default settings.
+#   }
+# }
